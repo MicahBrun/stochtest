@@ -10,7 +10,7 @@ class StatisticalAssertion():
     def __init__(self, samples: Iterable):
         self._samples = samples
     
-    def has_acceptance_rate(self, target_rate, alpha=0.05, acceptance_condition='less'):
+    def has_acceptance_rate(self, target_rate, alpha=0.05, acceptance_condition='greater'):
         self._validate_single_assertion()
         self._validate_alternative(acceptance_condition)
 
@@ -21,9 +21,10 @@ class StatisticalAssertion():
         n = arr.size
 
         result = ss.binomtest(k, n, target_rate, alternative=StatisticalAssertion._acceptance_condition_to_alternative(acceptance_condition))
-        if (result.pvalue >= alpha):
+        if (result.pvalue > alpha):
             raise AssertionError(
-                f"Observed rate ({result.statistic:.4f}) is not significantly {StatisticalAssertion._acceptance_condition_to_description(acceptance_condition)} than"
+                f"Observed rate ({result.statistic:.4f}) is not significantly "
+                f"{StatisticalAssertion._acceptance_condition_to_description(acceptance_condition)} than "
                 f"target ({target_rate:.4f}) (p={result.pvalue:.4e} >= alpha={alpha})."
             )
     
