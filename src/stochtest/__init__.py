@@ -1,10 +1,9 @@
 # SPDX-FileCopyrightText: 2025-present Micah Brown
 #
 # SPDX-License-Identifier: MIT
-from typing import TypeVar, Iterable
+from typing import Iterable
 
-import core
+import internal._core as _core
 
-T=core.T
-def assert_that(samples: Iterable[T]) -> core.StatisticalAssertion[T]:
-    return core.StatisticalAssertion(samples)
+def assert_that(samples: Iterable) -> _core.StatisticalAssertion:
+    return _core.StatisticalAssertion(samples)
