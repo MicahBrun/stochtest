@@ -2,19 +2,19 @@
 #
 # SPDX-License-Identifier: MIT
 from scipy import stats as ss
-from typing import TypeVar, Generic, Iterable
+from typing import Iterable
 import numpy as np
 
 class StatisticalAssertion():
     _acceptance_conditions = ["less", "greater"]
-    def __init__(self, samples: Iterable):
+    def __init__(self, *samples: Iterable):
         self._samples = samples
     
     def has_acceptance_rate(self, target_rate, alpha=0.05, acceptance_condition='greater'):
         self._validate_single_assertion()
         self._validate_alternative(acceptance_condition)
 
-        arr = np.asarray(self._samples, dtype=bool)
+        arr = np.asarray(self._samples[0], dtype=bool)
         self._samples = None
 
         k = np.sum(arr)
