@@ -3,7 +3,7 @@
 # SPDX-License-Identifier: MIT
 from typing import Iterable
 
-import internal._core as _core
+import stochtest._core as _core
 
 def assert_that(*samples: Iterable) -> _core.StatisticalAssertion:
     return _core.StatisticalAssertion(*samples)

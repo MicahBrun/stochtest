@@ -5,7 +5,7 @@ build-backend = "hatchling.build"
 [project]
 name = "stochtest"
 dynamic = ["version"]
-description = 'Stochtest is a Python library for performing assertions on stochastic functions using statistical methods.'
+description = 'Stochtest is a Python library for performing statistical assertions on stochastic outputs.'
 readme = "README.md"
 requires-python = ">=3.10"
 license = "MIT"
@@ -14,7 +14,7 @@ authors = [
   { name = "Micah Brown", email = "micahbrun.dev@gmail.com" },
 ]
 classifiers = [
-  "Development Status :: 4 - Beta",
+  "Development Status :: 2 - Pre-Alpha",
   "Programming Language :: Python",
   "Programming Language :: Python :: 3.10",
   "Programming Language :: Python :: 3.11",

@@ -5,7 +5,7 @@
 
 -----
 
-Stochtest is a Python library for performing assertions on stochastic functions using statistical methods. It enables automated testing for Monte Carlo simulations and provides a framework for validating probabilistic code with TDD-style workflows.
+Stochtest is a Python library for performing statistical assertions on stochastic outputs (i.e. outputs described by probability distributions) using statistical methods. It enables automated testing for probabilistic code and Monte Carlo simulations.
 
 ## Installation
 
