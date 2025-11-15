@@ -14,16 +14,24 @@ jobs:
     permissions:
       id-token: write
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout repo with tags
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
           python-version: "3.x"
+
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
+          python -m pip install build hatchling hatch-vcs
+
       - name: Build package
         run: |
           python -m build
+          
       - name: Publish package distributions to PyPI
         uses: pypa/gh-action-pypi-publish@release/v1
