@@ -9,7 +9,7 @@ class StatisticalAssertion():
     def __init__(self, *samples: Iterable):
         self._samples = samples
 
-    def has_acceptance_rate_less_than(self, target_rate, alpha=0.05):
+    def has_acceptance_rate_less_than(self, target_rate: float, alpha=0.05):
         self._validate_single_assertion()
 
         samples = self._get_samples_singleton()
@@ -18,7 +18,7 @@ class StatisticalAssertion():
         self._enforce_single_assertion()
 
         return self._assert_acceptance_rate_check(arr, target_rate, alpha, "less")
-    def has_acceptance_rate_greater_than(self, target_rate, alpha=0.05):
+    def has_acceptance_rate_greater_than(self, target_rate: float, alpha=0.05):
         self._validate_single_assertion()
 
         samples = self._get_samples_singleton()
