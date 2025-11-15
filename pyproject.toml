@@ -28,7 +28,7 @@ dependencies = []
 source="vcs"
 
 [tool.hatch.build.hooks.vcs]
-version-file = "stochtest/__about__.py"
+version-file = "src/stochtest/__about__.py"
 
 [tool.hatch.envs.types]
 extra-dependencies = [
