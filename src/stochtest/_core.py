@@ -37,9 +37,9 @@ class StatisticalAssertion():
         result = ss.binomtest(k, n, target_rate, alternative=StatisticalAssertion._acceptance_condition_to_alternative(acceptance_condition))
         if (result.pvalue > alpha):
             raise AssertionError(
-                f"Observed rate ({result.statistic:.4f}) is not significantly "
-                f"{StatisticalAssertion._acceptance_condition_to_description(acceptance_condition)} than "
-                f"target ({target_rate:.4f}) (p={result.pvalue:.4e} >= alpha={alpha})."
+                f"Observed rate ({result.statistic:.4g}) is not significantly "
+                f"{StatisticalAssertion._acceptance_condition_to_description(acceptance_condition)} "
+                f"target ({target_rate:.4g}) (p={result.pvalue:.4g} >= alpha={alpha:.4g}). (n={n})"
             )
     
     def _validate_single_assertion(self):
