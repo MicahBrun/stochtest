@@ -24,7 +24,10 @@ classifiers = [
 ]
 dependencies = []
 [tool.hatch.version]
-path = "src/stochtest/__about__.py"
+source="vcs"
+
+[tool.hatch.build.hooks.vcs]
+version-file = "stochtest/__about__.py"
 
 [tool.hatch.envs.types]
 extra-dependencies = [
