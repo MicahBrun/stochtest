@@ -7,8 +7,20 @@ name = "stochtest"
 dynamic = ["version"]
 description = 'Stochtest is a Python library for performing statistical assertions on stochastic outputs.'
 readme = "README.md"
+keywords = [
+    "test",
+    "testing",
+    "unittest",
+    "assertions",
+    "MCMC",
+    "monte carlo",
+    "simulation,
+    "statistics",
+    "stochastic"
+]
 requires-python = ">=3.10"
 license = "MIT"
+license-files = [ "LICENSE.txt" ]
 keywords = []
 authors = [
   { name = "Micah Brown", email = "micahbrun.dev@gmail.com" },
@@ -23,6 +35,10 @@ classifiers = [
   "Programming Language :: Python :: Implementation :: PyPy",
 ]
 dependencies = []
+
+[project.urls]
+Repository = "https://github.com/MicahBrun/stochtest"
+Issues = "https://github.com/MicahBrun/stochtest/issues"
 
 [tool.hatch.version]
 source="vcs"
