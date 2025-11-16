@@ -1,15 +1,57 @@
 # SPDX-FileCopyrightText: 2025-present Micah Brown
 #
 # SPDX-License-Identifier: MIT
-from typing import Iterable
+from typing import Iterable, Union, Callable
 import scipy.stats as ss
 import numpy as np
 
 class _DistributionsStatisticalAssertion:
     def __init__(self, samples: Iterable):
         self._samples = samples
+    
+    def has_normal_distribution(self, loc, scale, margin = 0.02, confidence = 0.95, n_bootstraps = 500, random_state:np.random.RandomState=None):
+        cdf = lambda x: ss.norm.cdf(x, loc=loc, scale=scale)
+        self._has_distribution_from_cdf(cdf, margin, confidence, n_bootstraps, random_state)
 
-    def has_distribution(self, reference_samples: Iterable, margin = 0.02, confidence = 0.95, n_bootstraps = 500, random_state=None):
+    def has_distribution(self, reference: Union[Iterable[float], Callable[[float], float]], margin = 0.02, confidence = 0.95, n_bootstraps = 500, random_state=None):
+        if callable(reference):
+            self._has_distribution_from_cdf(reference, margin, confidence, n_bootstraps, random_state)
+        elif isinstance(reference, Iterable):
+            self._has_distribution_from_reference_samples(reference, margin, confidence, n_bootstraps, random_state)
+        else:
+            raise TypeError("reference must be iterable or a callable CDF")
+
+    def _has_distribution_from_cdf(self, reference_cdf: Callable[[float], float], margin: float, confidence: float, n_bootstraps: int, random_state=None):
+        self._validate_single_assertion()
+        MAX_INDIVIDUAL_SAMPLES_PER_BATCH = 1_000_000
+
+        generator = np.random.default_rng(random_state)
+
+        n=len(self._samples)
+        max_batch_size = max(1, MAX_INDIVIDUAL_SAMPLES_PER_BATCH//n)
+
+        ks_distances = np.array(
+            [d
+                for batch_size in _DistributionsStatisticalAssertion.batch_sizes(
+                    n_bootstraps, 
+                    max_batch_size)
+                for d in _DistributionsStatisticalAssertion._apply_ks_1samp_to_batch(
+                    self._samples, 
+                    reference_cdf, 
+                    batch_size, 
+                    generator)])
+
+        successes = ks_distances <= margin
+        success_rate = sum(successes)/n_bootstraps
+
+        base_ks_distance = ss.ks_1samp(self._samples, reference_cdf).statistic
+
+        self._enforce_single_assertion()
+
+        if (success_rate < confidence):
+            raise AssertionError(f"Confidence ({success_rate}) less than ({confidence}). Distance={base_ks_distance}")
+
+    def _has_distribution_from_reference_samples(self, reference_samples: Iterable, margin: float, confidence: float, n_bootstraps: int, random_state=None):
         self._validate_single_assertion()
         MAX_INDIVIDUAL_SAMPLES_PER_BATCH = 1_000_000
 
@@ -38,6 +80,13 @@ class _DistributionsStatisticalAssertion:
 
         if (success_rate < confidence):
             raise AssertionError(f"Confidence ({success_rate}) less than ({confidence}). Distance={base_ks_distance}")
+    
+    @staticmethod
+    def _apply_ks_1samp_to_batch(samples, reference_cdf, n_bootstraps_in_batch, generator):
+        n=len(samples)
+        sample_bootstraps = generator.choice(samples, size=(n_bootstraps_in_batch, n), replace=True)
+        ks_output = ss.ks_1samp(sample_bootstraps, reference_cdf, axis=1)
+        return ks_output.statistic
     
     @staticmethod
     def _apply_ks_2samp_to_batch(samples, reference_samples, n_bootstraps_in_batch, generator):
