@@ -2,14 +2,19 @@
 #
 # SPDX-License-Identifier: MIT
 import pytest
+import scipy.stats as ss
 
 import stochtest
 
 def test_has_acceptance_rate_greater_than_happy_path():
-    # Arrange
     data = ([True] + [False]) * 200
     
     stochtest.assert_that(data).has_acceptance_rate_greater_than(0.45, alpha=0.05)
+
+def test_has_acceptance_rate_greater_than_typical_use_case_with_normal():
+    rvs = ss.norm.rvs(size=10000, random_state=42)
+    
+    stochtest.assert_that(rvs > 1).has_acceptance_rate_greater_than(0.15, alpha=0.05)
 
 def test_has_acceptance_rate_greater_than_fails_when_empirical_rate_less_than():
     # Arrange

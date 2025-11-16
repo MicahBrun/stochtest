@@ -5,7 +5,7 @@ from scipy import stats as ss
 from typing import Iterable
 import numpy as np
 
-class StatisticalAssertion():
+class _StatisticalAssertion():
     def __init__(self, *samples: Iterable):
         self._samples = samples
 
@@ -17,7 +17,7 @@ class StatisticalAssertion():
 
         self._enforce_single_assertion()
 
-        return self._assert_acceptance_rate_check(arr, target_rate, alpha, "less")
+        self._assert_acceptance_rate_check(arr, target_rate, alpha, "less")
     def has_acceptance_rate_greater_than(self, target_rate: float, alpha=0.05):
         self._validate_single_assertion()
 
@@ -26,7 +26,7 @@ class StatisticalAssertion():
 
         self._enforce_single_assertion()
 
-        return self._assert_acceptance_rate_check(arr, target_rate, alpha, "greater")
+        self._assert_acceptance_rate_check(arr, target_rate, alpha, "greater")
     
     _acceptance_conditions = ["less", "greater"]
     def _assert_acceptance_rate_check(self, samples: np.ndarray[np.bool], target_rate: float, alpha: float, acceptance_condition='greater'):
@@ -34,17 +34,17 @@ class StatisticalAssertion():
         k = np.sum(samples)
         n = samples.size
 
-        result = ss.binomtest(k, n, target_rate, alternative=StatisticalAssertion._acceptance_condition_to_alternative(acceptance_condition))
+        result = ss.binomtest(k, n, target_rate, alternative=_StatisticalAssertion._acceptance_condition_to_alternative(acceptance_condition))
         if (result.pvalue > alpha):
             raise AssertionError(
                 f"Observed rate ({result.statistic:.4g}) is not significantly "
-                f"{StatisticalAssertion._acceptance_condition_to_description(acceptance_condition)} "
+                f"{_StatisticalAssertion._acceptance_condition_to_description(acceptance_condition)} "
                 f"target ({target_rate:.4g}) (p={result.pvalue:.4g} >= alpha={alpha:.4g}). (n={n})"
             )
     
     def _validate_single_assertion(self):
         if self._samples is None:
-            raise RuntimeError("Multiple assertion methods called on the same StatisticalAssertion instance.")
+            raise RuntimeError("Multiple assertion methods called on the same {self.__class__.__name__} instance.")
     
     def _enforce_single_assertion(self):
         self._validate_single_assertion()
