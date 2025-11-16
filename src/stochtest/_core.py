@@ -44,7 +44,7 @@ class _StatisticalAssertion():
     
     def _validate_single_assertion(self):
         if self._samples is None:
-            raise RuntimeError("Multiple assertion methods called on the same {self.__class__.__name__} instance.")
+            raise RuntimeError(f"Multiple assertion methods called on the same {self.__class__.__name__} instance.")
     
     def _enforce_single_assertion(self):
         self._validate_single_assertion()
