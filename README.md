@@ -16,3 +16,9 @@ pip install stochtest
 ## License
 
 `stochtest` is distributed under the terms of the [MIT](https://spdx.org/licenses/MIT.html) license.
+
+## Inspiration / References
+
+The MCMC testing functionality in **stochtest** is inspired by the R package [**mcunit**](https://cran.r-project.org/package=mcunit) (Gandy & Scott, 2020), which provides unit-testing methods for Monte Carlo and MCMC algorithms. 
+
+This work influenced the design and methodology of the MCMC-related statistical assertions in **stochtest**.
