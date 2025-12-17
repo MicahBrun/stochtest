@@ -34,7 +34,7 @@ stochtest.assert_that(outcomes).has_acceptance_rate_between(0.45, 0.55)
 returns = np.random.normal(1, 0.5, 1000)
 
 stochtest.assert_that(returns).has_expected_value_greater_than(0.5)
-stochtest.assert_that(returns).has_expected_value_of(0.9, 1.1)
+stochtest.assert_that(returns).has_expected_value_between(0.9, 1.1)
 
 ```
 
