@@ -33,6 +33,7 @@ jobs:
 
       - name: Build package
         run: |
+          export SETUPTOOLS_SCM_PRETEND_VERSION=$(echo ${GITHUB_REF_NAME} | sed 's/^v//')
           python -m build --wheel --sdist
 
       - name: Publish package distributions to PyPI
