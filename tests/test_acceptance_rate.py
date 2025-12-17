@@ -65,3 +65,13 @@ def test_has_acceptance_rate_less_than_fails_when_not_enough_for_significance():
     
     # Assert
     assert "is not significantly less than target" in str(excinfo.value)
+
+def test_has_acceptance_rate_between_happy_path():
+    data = ([True] + [False]) * 200
+    
+    stochtest.assert_that(data).has_acceptance_rate_between(0.45, 0.55, alpha=0.05)
+
+def test_has_acceptance_rate_of_happy_path():
+    data = ([True] + [False]) * 200
+    
+    stochtest.assert_that(data).has_acceptance_rate_of(0.5, 0.05, alpha=0.05)

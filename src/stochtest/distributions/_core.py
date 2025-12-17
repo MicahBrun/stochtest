@@ -10,10 +10,51 @@ class _DistributionsStatisticalAssertion:
         self._samples = samples
     
     def has_normal_distribution(self, loc, scale, margin = 0.02, confidence = 0.95, n_bootstraps = 500, random_state:np.random.RandomState=None):
+        """
+        Asserts that the samples follow a Normal distribution N(loc, scale).
+
+        This checks if the KS distance between the empirical CDF of the samples 
+        and the theoretical CDF of N(loc, scale) is consistently small.
+
+        Args:
+            loc (float): The mean of the target normal distribution.
+            scale (float): The standard deviation of the target normal distribution.
+            margin (float, optional): The maximum acceptable KS distance. 
+                                     Defaults to 0.02.
+            confidence (float, optional): The required proportion of bootstraps 
+                                          that must fall within the margin. 
+                                          Defaults to 0.95 (95%).
+            n_bootstraps (int, optional): Number of bootstrap resamples to generate. 
+                                          Defaults to 500.
+            random_state (optional): Seed or generator for reproducibility.
+        
+        Raises:
+            AssertionError: If the confidence threshold is not met for the given margin.
+        """
         cdf = lambda x: ss.norm.cdf(x, loc=loc, scale=scale)
         self._has_distribution_from_cdf(cdf, margin, confidence, n_bootstraps, random_state)
 
     def has_distribution(self, reference: Union[Iterable[float], Callable[[float], float]], margin = 0.02, confidence = 0.95, n_bootstraps = 500, random_state=None):
+        """
+        Asserts that the samples follow a target distribution provided by a
+        reference dataset or a cumulative distribution function (CDF).
+
+        Args:
+            reference (Union[Iterable, Callable]): 
+                - If Iterable: treated as a reference sample (Two-sample KS test).
+                - If Callable: treated as a theoretical CDF (One-sample KS test).
+            margin (float, optional): The maximum acceptable KS distance. 
+                                     Defaults to 0.02.
+            confidence (float, optional): The required proportion of bootstraps 
+                                          that must fall within the margin. 
+                                          Defaults to 0.95.
+            n_bootstraps (int, optional): Number of bootstrap resamples. Defaults to 500.
+            random_state (optional): Seed or generator for reproducibility.
+
+        Raises:
+            TypeError: If reference is neither an iterable nor a callable.
+            AssertionError: If the distributions are not sufficiently similar.
+        """
         if callable(reference):
             self._has_distribution_from_cdf(reference, margin, confidence, n_bootstraps, random_state)
         elif isinstance(reference, Iterable):
